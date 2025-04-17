@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import TodoList from "./components/TodoList";
-import TodoForm from "./components/TodoForm";
-import SearchBar from "./components/SearchBar";
+import { useState, useEffect } from "react";
+import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/NotFoundPage";
 import todoService from "./services/todoService";
 import debounce from "lodash.debounce";
 import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
+import LinkListTodo from "./pages/LinkListTodo";
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -40,16 +41,23 @@ function App() {
   const deleteTodo = async (id) => {
     try {
       await todoService.deleteTodo(id);
-      setTodos(todos.filter((todo) => todo.id !== id));
+      const updatedTodos = todos.filter((todo) => todo.id !== id);
+      setTodos(updatedTodos);
     } catch (error) {
       console.error("Error deleting todo:", error);
     }
   };
 
-  const updateTodo = (id, newText) => {
-    setTodos(
-      todos.map((todo) => (todo.id === id ? { ...todo, text: newText } : todo))
-    );
+  const updateTodo = async (id, newText) => {
+    try {
+      await todoService.updateTodo(id, { text: newText });
+      const updatedTodos = todos.map((todo) =>
+        todo.id === id ? { ...todo, text: newText } : todo
+      );
+      setTodos(updatedTodos);
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    }
   };
 
   const handleSearch = (term) => {
@@ -83,19 +91,38 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <h1>Список дел</h1>
-      <TodoForm onAdd={addTodo} />
-      <SearchBar onSearch={debouncedSearch} />
-      <button onClick={toggleSort}>
-        Сортировка: {sortByAlpha ? "вкл" : "выкл"}
-      </button>
-      <TodoList
-        todos={getFilteredTodos()}
-        onDelete={deleteTodo}
-        onUpdate={updateTodo}
-      />
-    </div>
+    <>
+      <div>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                todos={todos}
+                sortByAlpha={sortByAlpha}
+                toggleSort={toggleSort}
+                debouncedSearch={debouncedSearch}
+                addTodo={addTodo}
+                getFilteredTodos={getFilteredTodos}
+              />
+            }
+          />
+          <Route
+            path="task/:id"
+            element={
+              <LinkListTodo
+                todos={todos}
+                onDelete={deleteTodo}
+                onUpdate={updateTodo}
+              />
+            }
+          />
+          <Route path="/404" element={<NotFoundPage />} />
+          <Route path="*" element={<Navigate to="/404" replace={true} />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </div>
+    </>
   );
 }
 

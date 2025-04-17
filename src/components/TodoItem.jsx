@@ -1,55 +1,13 @@
-import React, { useState } from "react";
-import todoService from "../services/todoService";
+import { Link } from "react-router-dom";
 import "./TodoItem.css";
+import todoService from "../services/todoService";
 
-function TodoItem({ todo, onDelete, onUpdate }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(todo.text);
-
-  const handleDelete = () => {
-    onDelete(todo.id);
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleSave = async () => {
-    try {
-      await todoService.updateTodo(todo.id, { ...todo, text: editText });
-      onUpdate(todo.id, editText);
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error updating todo:", error);
-    }
-  };
-
-  const handleCancel = () => {
-    setEditText(todo.text);
-    setIsEditing(false);
-  };
-
+function TodoItem({ todo }) {
   return (
-    <li className="todo-item">
-      {isEditing ? (
-        <>
-          <input
-            type="text"
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-          />
-          <button onClick={handleSave}>Сохранить</button>
-          <button onClick={handleCancel}>Отмена</button>
-        </>
-      ) : (
-        <>
-          <span>{todo.text}</span>
-          <div>
-            <button onClick={handleEdit}>Редактировать</button>
-            <button onClick={handleDelete}>Удалить</button>
-          </div>
-        </>
-      )}
+    <li key={todo.id} className="todo-item-main">
+      <Link to={`/task/${todo.id}`} className="no-link-style">
+        {todoService.titleLength(todo.text)}
+      </Link>
     </li>
   );
 }

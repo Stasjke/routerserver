@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3001/todos';
+const BASE_URL = 'http://localhost:3002/todos';
 
 const todoService = {
   getAllTodos: async () => {
@@ -39,11 +39,10 @@ const todoService = {
       const response = await fetch(`${BASE_URL}/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json' 
         },
         body: JSON.stringify(updatedTodo)
       });
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -66,6 +65,9 @@ const todoService = {
       console.error("Ошибка удаления:", error);
       throw error;
     }
+  },
+  titleLength : (title) => {
+    return title.length > 10 ? title.slice(0, 10) + '...' : title;
   }
 };
 

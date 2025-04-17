@@ -1,20 +1,12 @@
 {
   "todos": [
     {
-      "text": "stas",
-      "id": 1
+      "text": "привет первое дело",
+      "id": 24
     },
     {
-      "text": "a ya pivo",
-      "id": 2
-    },
-    {
-      "text": "vine",
-      "id": 3
-    },
-    {
-      "text": "ahahahaha",
-      "id": 4
+      "text": "а это 2",
+      "id": 26
     }
   ]
 }

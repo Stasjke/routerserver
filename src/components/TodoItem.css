@@ -1,25 +1,36 @@
-.todo-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .todo-item:last-child {
-    border-bottom: none;
-  }
-  
-  .todo-actions button {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    margin-left: 5px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .todo-actions button:hover {
-    background-color: #c82333;
-  }
+.todo-item-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.todo-item-main:last-child {
+  border-bottom: none;
+}
+
+.no-link-style {
+  text-decoration: none;
+  color: inherit; 
+  cursor: pointer; 
+}
+
+.no-link-style:hover {
+  text-decoration: underline;
+  color: blue; 
+}
+
+.todo-actions button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.todo-actions button:hover {
+  background-color: #c82333;
+}
