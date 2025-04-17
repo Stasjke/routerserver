@@ -1,0 +1,15 @@
+.home-page {
+
+    padding: 20px;
+    background-color: #f0f0f0;
+  }
+h1{
+    text-align: center;
+}
+  .toggle-sort-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }

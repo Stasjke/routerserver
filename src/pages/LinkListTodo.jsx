@@ -1,35 +1,38 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import todoService from "../services/todoService";
 import "./LinkListTodo.css";
 
-function LinkListTodo({ todos, onDelete, onUpdate }) {
+function LinkListTodo() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState("");
   const [selectedTodo, setSelectedTodo] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const foundTodo = todos.find((todo) => todo.id === Number(id));
-    if (foundTodo) {
-      setSelectedTodo(foundTodo);
-      setEditText(foundTodo.text);
-    } else {
+    fetchTodo();
+  }, [id]);
+
+  const fetchTodo = async () => {
+    setLoading(true);
+    try {
+      const todo = await todoService.getTodo(id);
+      setSelectedTodo(todo);
+      setEditText(todo.text);
+    } catch (error) {
+      console.error("Error fetching todo:", error);
       navigate("/404");
+    } finally {
+      setLoading(false);
     }
-  }, [id, navigate, todos]);
-
-  useEffect(() => {
-    if (selectedTodo) {
-      setEditText(selectedTodo.text);
-    }
-  }, [selectedTodo]);
+  };
 
   const handleDelete = async () => {
     try {
+      await todoService.deleteTodo(id);
       navigate("/");
-      await onDelete(Number(id));
     } catch (error) {
       console.error("Error deleting todo:", error);
     }
@@ -41,8 +44,7 @@ function LinkListTodo({ todos, onDelete, onUpdate }) {
 
   const handleSave = async () => {
     try {
-      await todoService.updateTodo(Number(id), { text: editText });
-      await onUpdate(Number(id), editText);
+      await todoService.updateTodo(id, { text: editText });
       setIsEditing(false);
       navigate("/");
     } catch (error) {
@@ -58,6 +60,10 @@ function LinkListTodo({ todos, onDelete, onUpdate }) {
   const goHomePage = () => {
     navigate("/");
   };
+
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
 
   if (!selectedTodo) {
     return null;

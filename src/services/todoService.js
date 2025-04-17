@@ -39,7 +39,7 @@ const todoService = {
       const response = await fetch(`${BASE_URL}/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json' 
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(updatedTodo)
       });
@@ -66,6 +66,20 @@ const todoService = {
       throw error;
     }
   },
+
+  getTodo: async (id) => {
+    try {
+      const response = await fetch(`${BASE_URL}/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching todo:", error);
+      throw error;
+    }
+  },
+
   titleLength : (title) => {
     return title.length > 10 ? title.slice(0, 10) + '...' : title;
   }
