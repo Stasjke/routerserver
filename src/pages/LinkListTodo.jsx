@@ -58,7 +58,7 @@ function LinkListTodo() {
   };
 
   const goHomePage = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   if (loading) {
@@ -92,11 +92,10 @@ function LinkListTodo() {
             <button onClick={handleDelete} className="button-delete">
               Удалить
             </button>
+            <button onClick={goHomePage}>Назад</button>
           </div>
         </>
       )}
-
-      <button onClick={goHomePage}>Назад</button>
     </div>
   );
 }
