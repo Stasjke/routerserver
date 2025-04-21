@@ -3,6 +3,7 @@ import TodoForm from "../components/TodoForm";
 import SearchBar from "../components/SearchBar";
 import TodoList from "../components/TodoList";
 import todoService from "../services/todoService";
+import debounce from "lodash.debounce";
 import "./HomePage.css";
 
 function HomePage() {
@@ -36,35 +37,13 @@ function HomePage() {
     }
   };
 
-  const deleteTodo = async (id) => {
-    try {
-      await todoService.deleteTodo(id);
-      setTodos(todos.filter((todo) => todo.id !== id));
-    } catch (error) {
-      console.error("Error deleting todo:", error);
-    }
-  };
-
-  const updateTodo = async (id, newText) => {
-    try {
-      await todoService.updateTodo(id, newText);
-      setTodos(
-        todos.map((todo) =>
-          todo.id === id ? { ...todo, text: newText } : todo
-        )
-      );
-    } catch (error) {
-      console.error("Error updating todo:", error);
-    }
-  };
-
   const handleSearch = (term) => {
     setSearchTerm(term);
   };
 
-  const debouncedSearch = (term) => {
+  const debouncedSearch = debounce((term) => {
     setSearchTerm(term);
-  };
+  }, 300);
 
   const toggleSort = () => {
     setSortByAlpha(!sortByAlpha);
@@ -96,11 +75,7 @@ function HomePage() {
       <button className="toggle-sort-button" onClick={toggleSort}>
         Сортировка: {sortByAlpha ? "вкл" : "выкл"}
       </button>
-      <TodoList
-        todos={getFilteredTodos()}
-        onDelete={deleteTodo}
-        onUpdate={updateTodo}
-      />
+      <TodoList todos={getFilteredTodos()} />
     </div>
   );
 }
